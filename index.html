@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard User</title>
+
+<style>
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#101010;
+font-family:Arial;
+color:white;
+}
+
+.box{
+width:330px;
+background:#1b1b1b;
+padding:25px;
+border-radius:15px;
+box-shadow:0 0 20px red;
+text-align:center;
+}
+
+h2{
+color:red;
+}
+
+input,select{
+width:90%;
+padding:12px;
+margin:8px;
+border:0;
+border-radius:8px;
+}
+
+button{
+width:95%;
+padding:12px;
+margin:8px;
+background:red;
+color:white;
+border:0;
+border-radius:8px;
+}
+
+a{
+color:#ff4444;
+cursor:pointer;
+}
+
+#signup,#dashboard{
+display:none;
+}
+
+.menu{
+background:#292929;
+padding:15px;
+margin:10px 0;
+border-radius:10px;
+cursor:pointer;
+}
+</style>
+
+</head>
+
+<body>
+
+
+<!-- LOGIN -->
+
+<div class="box" id="login">
+
+<h2>🔐 LOGIN</h2>
+
+<input id="loginUser" placeholder="Username">
+
+<input id="loginPass" type="password" placeholder="Password">
+
+<button onclick="login()">MASUK</button>
+
+<p>
+Belum punya akun?
+<a onclick="bukaSignup()">Sign Up</a>
+</p>
+
+<p id="loginInfo"></p>
+
+</div>
+
+
+
+<!-- SIGN UP -->
+
+<div class="box" id="signup">
+
+<h2>📝 SIGN UP</h2>
+
+<input id="regUser" placeholder="Buat Username">
+
+<input id="regPass" type="password" placeholder="Buat Password">
+
+<input id="regConfirm" type="password" placeholder="Konfirmasi Password">
+
+
+<select id="regRole">
+<option value="">Pilih Role</option>
+<option>Owner</option>
+<option>Reseller</option>
+<option>Admin</option>
+<option>Member</option>
+</select>
+
+
+<select id="regExpired">
+<option value="">Pilih Expired</option>
+<option>30 Hari</option>
+<option>90 Hari</option>
+<option>1 Tahun</option>
+<option>Permanen</option>
+</select>
+
+
+<button onclick="daftar()">
+BUAT AKUN
+</button>
+
+
+<p id="signupInfo"></p>
+
+
+<a onclick="bukaLogin()">
+⬅ Kembali Login
+</a>
+
+</div>
+
+
+
+
+<!-- DASHBOARD -->
+
+<div class="box" id="dashboard">
+
+<h2>🏠 DASHBOARD</h2>
+
+<p id="welcome"></p>
+
+
+<div class="menu" onclick="profil()">
+👤 Profil
+</div>
+
+
+<div class="menu">
+📊 Statistik
+</div>
+
+
+<div class="menu">
+⚙️ Pengaturan
+</div>
+
+
+<div id="profilData"></div>
+
+
+<button onclick="logout()">
+🚪 Logout
+</button>
+
+</div>
+
+
+
+
+<script>
+
+
+function bukaSignup(){
+
+document.getElementById("login").style.display="none";
+
+document.getElementById("signup").style.display="block";
+
+}
+
+
+
+function bukaLogin(){
+
+document.getElementById("signup").style.display="none";
+
+document.getElementById("login").style.display="block";
+
+}
+
+
+
+function daftar(){
+
+let user=document.getElementById("regUser").value;
+
+let pass=document.getElementById("regPass").value;
+
+let confirm=document.getElementById("regConfirm").value;
+
+let role=document.getElementById("regRole").value;
+
+let expired=document.getElementById("regExpired").value;
+
+
+let pesan=document.getElementById("signupInfo");
+
+
+if(user==""  pass==""  role=="" || expired==""){
+
+pesan.innerHTML="❌ Lengkapi semua data";
+
+return;
+
+}
+
+
+
+if(pass!==confirm){
+
+pesan.innerHTML="❌ Password tidak sama";
+
+return;
+
+}
+
+
+
+localStorage.setItem("username",user);
+
+localStorage.setItem("password",pass);
+
+localStorage.setItem("role",role);
+
+localStorage.setItem("expired",expired);
+
+
+
+pesan.innerHTML="✅ Akun berhasil dibuat";
+
+
+setTimeout(function(){
+
+bukaLogin();
+
+},1500);
+
+
+}
+
+
+
+
+function login(){
+
+let user=document.getElementById("loginUser").value;
+
+let pass=document.getElementById("loginPass").value;
+
+
+
+// akun pemilik
+
+if(user==="salz" && pass==="765"){
+
+localStorage.setItem("username","salz");
+localStorage.setItem("role","Pemilik");
+localStorage.setItem("expired","Permanen");
+
+masukDashboard();
+
+return;
+
+}
+
+
+
+let saveUser=localStorage.getItem("username");
+
+let savePass=localStorage.getItem("password");
+
+
+
+if(user===saveUser && pass===savePass){
+
+masukDashboard();
+
+}else{
+
+document.getElementById("loginInfo").innerHTML=
+"❌ Username atau password salah";
+
+}
+
+}
+
+
+
+
+function masukDashboard(){
+
+document.getElementById("login").style.display="none";
+
+document.getElementById("dashboard").style.display="block";
